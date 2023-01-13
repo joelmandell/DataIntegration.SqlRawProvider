@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dynamicweb.DataIntegration.Providers.SqlProvider", "src\Dynamicweb.DataIntegration.Providers.SqlProvider.csproj", "{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C3A6DDB-83BB-45F9-8C44-264503F69528}
+	EndGlobalSection
+EndGlobal
