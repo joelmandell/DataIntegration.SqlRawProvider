@@ -20,12 +20,8 @@
 		<FileVersion>3.0.7.0</FileVersion>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Dynamicweb" Version="9.10.19" />
-		<PackageReference Include="Dynamicweb.Configuration" Version="4.1.2" />
-		<PackageReference Include="Dynamicweb.Core" Version="3.1.0" />
-		<PackageReference Include="Dynamicweb.DataIntegration" Version="3.0.10" />
-		<PackageReference Include="Dynamicweb.Ecommerce" Version="1.10.50" />
-		<PackageReference Include="Dynamicweb.Extensibility" Version="4.0.2" />
-		<PackageReference Include="Dynamicweb.Logging" Version="5.1.2" />
+		<PackageReference Include="Dynamicweb" Version="10.0.0-*" />
+		<PackageReference Include="Dynamicweb.Core" Version="10.0.0-*" />
+		<PackageReference Include="Dynamicweb.DataIntegration" Version="10.0.0-*" />
 	</ItemGroup>
 </Project>
