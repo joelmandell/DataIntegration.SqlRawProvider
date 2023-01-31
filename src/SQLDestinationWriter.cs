@@ -198,7 +198,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             var columnMappings = mapping.GetColumnMappings().Where(cm => cm.Active);
             foreach (ColumnMapping columnMapping in columnMappings)
             {
-                if (columnMapping.HasScriptWithValue() || row.ContainsKey(columnMapping.SourceColumn.Name))
+                if (columnMapping.HasScriptWithValue || row.ContainsKey(columnMapping.SourceColumn.Name))
                 {
                     switch (columnMapping.ScriptType)
                     {
@@ -211,12 +211,13 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                         case ScriptType.Prepend:
                             dataRow[columnMapping.DestinationColumn.Name] = columnMapping.ScriptValue + columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]);
                             break;
-                        case ScriptType.Constant:                        
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();                        
+                        case ScriptType.Constant:
+                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();
+                            break;
+                        case ScriptType.NewGuid:
+                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();
                             break;
                     }
-                    if (columnMapping.HasNewGuidScript())
-                        dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();
                 }
                 else
                 {
@@ -424,7 +425,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 string sqlConditions = "";
                 string firstKey = "";
-                var columnMappings = Mapping.GetColumnMappings().Where(cm => cm.Active);                
+                var columnMappings = Mapping.GetColumnMappings().Where(cm => cm.Active);
                 bool isPrimaryKeyColumnExists = columnMappings.IsKeyColumnExists();
 
                 foreach (ColumnMapping columnMapping in columnMappings)
@@ -488,7 +489,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 throw GetMoveDataToMainTableException(ex, SqlCommand, Mapping, tempTablePrefix, insertColumns);
             }
-        }        
+        }
 
         protected static bool HasIdentity(Mapping mapping)
         {
