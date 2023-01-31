@@ -67,7 +67,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
         protected virtual string GetFromTables()
         {
             string result = "[" + mapping.SourceTable.SqlSchema + "].[" + mapping.SourceTable.Name + "]";
-            if (mapping.SourceTable != null && mapping.SourceTable.Name == "EcomAssortmentPermissions" && 
+            if (mapping.SourceTable != null && mapping.SourceTable.Name == "EcomAssortmentPermissions" &&
                 (mapping.GetColumnMappings().Find(cm => cm.SourceColumn != null && cm.SourceColumn.Name.ToLower() == "AssortmentPermissionAccessUserID".ToLower()) != null ||
                 mapping.GetColumnMappings().Find(cm => cm.SourceColumn != null && cm.SourceColumn.Name.ToLower() == "AssortmentPermissionCustomerNumber".ToLower()) != null ||
                 mapping.GetColumnMappings().Find(cm => cm.SourceColumn != null && cm.SourceColumn.Name.ToLower() == "AssortmentPermissionExternalID".ToLower()) != null))
@@ -133,7 +133,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                 List<ColumnMapping> columnMappings = mapping.GetColumnMappings().Where(cm => cm.SourceColumn != null).ToList();
                 foreach (MappingConditional mc in mapping.Conditionals.Where(mc => mc != null && mc.SourceColumn != null).GroupBy(g => new { g.SourceColumn.Name }).Select(g => g.First()))
                 {
-                    if (!columnsToSkip.Any(cts => string.Compare(cts, mc.SourceColumn.Name, true) == 0) && !columnMappings.Any(cm => string.Compare(cm.SourceColumn.Name, mc.SourceColumn.Name, true) == 0))                    
+                    if (!columnsToSkip.Any(cts => string.Compare(cts, mc.SourceColumn.Name, true) == 0) && !columnMappings.Any(cm => string.Compare(cm.SourceColumn.Name, mc.SourceColumn.Name, true) == 0))
                     {
                         ret += "[" + mc.SourceColumn.Name + "], ";
                     }

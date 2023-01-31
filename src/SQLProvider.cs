@@ -649,7 +649,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                     }
                 }
                 CommitTransaction();
-                Ecommerce.Common.Application.KillAll();
                 Logger.Log("Cleanup done");
             }
             catch (Exception ex)
