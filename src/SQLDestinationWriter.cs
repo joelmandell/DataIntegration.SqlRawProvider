@@ -17,7 +17,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
     /// </summary>
     public class SqlDestinationWriter : IDestinationWriter, IDisposable
     {
-        protected SqlCommand SqlCommand;
+        public SqlCommand SqlCommand;
 
         private Mapping mapping;
         public Mapping Mapping
@@ -669,12 +669,12 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         #region SqlExceptionDetails
 
-        private static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns)
+        public static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns)
         {
             return GetMoveDataToMainTableException(ex, sqlCommand, mapping, tempTablePrefix, insertColumns, null, null);
         }
 
-        private static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns,
+        public static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns,
             string sourceTableName, string destinationTableName)
         {
             string message = string.Format("failed to move data from temporary table [{0}.{1}{2}] to main table [{0}.{3}]. Exception: {4} Sql query: {5}",
