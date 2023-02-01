@@ -17,9 +17,9 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
     /// </summary>
     public class SqlDestinationWriter : IDestinationWriter, IDisposable
     {
-        protected internal SqlCommand SqlCommand;
+        protected SqlCommand SqlCommand;
 
-        internal Mapping mapping;
+        private Mapping mapping;
         public Mapping Mapping
         {
             get { return mapping; }
@@ -38,7 +38,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         protected SqlBulkCopy SqlBulkCopier;
         protected DataSet DataToWrite = new DataSet();
-        protected internal DataTable TableToWrite;
+        protected DataTable TableToWrite;
         protected readonly ILogger logger;
         protected int rowsToWriteCount;
         protected int lastLogRowsCount;
@@ -669,12 +669,12 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         #region SqlExceptionDetails
 
-        internal static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns)
+        private static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns)
         {
             return GetMoveDataToMainTableException(ex, sqlCommand, mapping, tempTablePrefix, insertColumns, null, null);
         }
 
-        internal static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns,
+        private static Exception GetMoveDataToMainTableException(Exception ex, SqlCommand sqlCommand, Mapping mapping, string tempTablePrefix, List<string> insertColumns,
             string sourceTableName, string destinationTableName)
         {
             string message = string.Format("failed to move data from temporary table [{0}.{1}{2}] to main table [{0}.{3}]. Exception: {4} Sql query: {5}",

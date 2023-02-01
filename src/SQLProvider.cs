@@ -137,8 +137,9 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             }
             set { _sqlConnectionString = value; }
         }
-        protected internal SqlConnection connection;
-        internal virtual SqlConnection Connection
+
+        protected SqlConnection connection;
+        protected virtual SqlConnection Connection
         {
             get
             {
