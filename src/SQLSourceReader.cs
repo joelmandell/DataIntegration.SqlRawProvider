@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 {
-    class SqlSourceReader : ISourceReader
+    public class SqlSourceReader : ISourceReader
     {
         protected SqlCommand _command;
         protected SqlDataReader _reader;
