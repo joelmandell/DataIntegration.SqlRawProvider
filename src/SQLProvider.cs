@@ -21,13 +21,13 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
     {
         protected Schema Schema;
 
-        [AddInParameter("Source server"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Source server"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceServer
         {
             get { return Server; }
             set { Server = value; }
         }
-        [AddInParameter("Destination server"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Destination server"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationServer
         {
             get { return Server; }
@@ -45,56 +45,56 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             get;
             set;
         }
-        [AddInParameter("Sql source server username"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source server username"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceUsername
         {
             get { return Username; }
             set { Username = value; }
         }
-        [AddInParameter("Sql destination server username"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination server username"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationUsername
         {
             get { return Username; }
             set { Username = value; }
         }
-        [AddInParameter("Sql source server password"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source server password"), AddInParameterEditor(typeof(TextParameterEditor), "password=true"), AddInParameterGroup("Source")]
         public virtual string SourcePassword
         {
             get { return Password; }
             set { Password = value; }
         }
-        [AddInParameter("Sql destination server password"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination server password"), AddInParameterEditor(typeof(TextParameterEditor), "password=true"), AddInParameterGroup("Destination")]
         public virtual string DestinationPassword
         {
             get { return Password; }
             set { Password = value; }
         }
-        [AddInParameter("Sql source database"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source database"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceDatabase
         {
             get { return Catalog; }
             set { Catalog = value; }
         }
-        [AddInParameter("Sql destination database"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination database"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationDatabase
         {
             get { return Catalog; }
             set { Catalog = value; }
         }
-        [AddInParameter("Sql source connection string"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source connection string"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceConnectionString
         {
             get { return ManualConnectionString; }
             set { ManualConnectionString = value; }
         }
-        [AddInParameter("Sql destination connection string"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination connection string"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationConnectionString
         {
             get { return ManualConnectionString; }
             set { ManualConnectionString = value; }
         }
 
-        [AddInParameter("Remove missing rows after import"), AddInParameterEditor(typeof(YesNoParameterEditor), "IconPath=/Admin/Images/Ribbon/Icons/Small/Warning.png;Tooltip=Removes rows from the destination and relation tables. This option takes precedence"), AddInParameterGroup("Destination")]
+        [AddInParameter("Remove missing rows after import"), AddInParameterEditor(typeof(YesNoParameterEditor), "Tooltip=Removes rows from the destination and relation tables. This option takes precedence"), AddInParameterGroup("Destination")]
         public virtual bool RemoveMissingAfterImport
         {
             get;
