@@ -114,9 +114,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
         [AddInParameter("Persist successful rows and skip failing rows"), AddInParameterEditor(typeof(YesNoParameterEditor), ""), AddInParameterGroup("Destination"), AddInParameterOrder(100)]
         public virtual bool SkipFailingRows { get; set; }
 
-        [AddInParameter("Use database views"), AddInParameterEditor(typeof(YesNoParameterEditor), ""), AddInParameterGroup("Source")]
-        public virtual bool UseDatabaseViews { get; set; }
-
         private string _sqlConnectionString;
         protected string SqlConnectionString
         {
@@ -233,12 +230,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                         if (node.HasChildNodes)
                             SkipFailingRows = node.FirstChild.Value == "True";
                         break;
-                    case "UseDatabaseViews":
-                        if (node.HasChildNodes)
-                        {
-                            UseDatabaseViews = node.FirstChild.Value == "True";
-                        }
-                        break;
                 }
             }
             connection = new SqlConnection(SqlConnectionString);
@@ -296,7 +287,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             Catalog = newProvider.Catalog;
             DiscardDuplicates = newProvider.DiscardDuplicates;
             SkipFailingRows = newProvider.SkipFailingRows;
-            UseDatabaseViews = newProvider.UseDatabaseViews;
         }
 
         public override void UpdateDestinationSettings(IDestination destination)
@@ -331,7 +321,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             root.Add(CreateParameterNode(GetType(), "Sql destination connection string", DestinationConnectionString));
             root.Add(CreateParameterNode(GetType(), "Remove missing rows after import in the destination tables only", RemoveMissingAfterImportDestinationTablesOnly.ToString()));
             root.Add(CreateParameterNode(GetType(), "Persist successful rows and skip failing rows", SkipFailingRows.ToString()));
-            root.Add(CreateParameterNode(GetType(), "Use database views", UseDatabaseViews.ToString()));
 
             string ret = document.ToString();
             return ret;
@@ -351,7 +340,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             xmlTextWriter.WriteElementString("Catalog", Catalog);
             xmlTextWriter.WriteElementString("DiscardDuplicates", DiscardDuplicates.ToString());
             xmlTextWriter.WriteElementString("SkipFailingRows", SkipFailingRows.ToString());
-            xmlTextWriter.WriteElementString("UseDatabaseViews", UseDatabaseViews.ToString());
 
             GetSchema().SaveAsXml(xmlTextWriter);
         }
@@ -400,30 +388,14 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         protected virtual string GetSqlForSchemaBuilding()
         {
-            string sql;
-            if (UseDatabaseViews)
-            {
-                sql = "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
-                            " case WHEN c.table_name IN (SELECT table_name FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) THEN 1 ELSE 0 END AS IsPrimaryKey " +
-                            " from INFORMATION_SCHEMA.COLUMNS  c " +
-                            " left  join (" +
-                            " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
-                            " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
-                            " INFORMATION_SCHEMA.TABLES " +
-                            " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME order by c.TABLE_NAME,ORDINAL_POSITION";
-            }
-            else
-            {
-                sql = "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
-                    " case WHEN c.table_name IN (SELECT table_name FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) THEN 1 ELSE 0 END AS IsPrimaryKey " +
-                    " from INFORMATION_SCHEMA.COLUMNS  c " +
-                    " left  join (" +
-                    " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
-                    " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
-                    " INFORMATION_SCHEMA.TABLES " +
-                    " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME and TABLE_TYPE<>'view'  order by c.TABLE_NAME,ORDINAL_POSITION";
-            }
-            return sql;
+            return "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
+                " (SELECT count(*) FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) AS IsPrimaryKey " +
+                " from INFORMATION_SCHEMA.COLUMNS  c " +
+                " left  join (" +
+                " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
+                " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
+                " INFORMATION_SCHEMA.TABLES " +
+                " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME order by c.TABLE_NAME,ORDINAL_POSITION";
         }
 
         public override Schema GetOriginalDestinationSchema()
