@@ -21,13 +21,13 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
     {
         protected Schema Schema;
 
-        [AddInParameter("Source server"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Source server"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceServer
         {
             get { return Server; }
             set { Server = value; }
         }
-        [AddInParameter("Destination server"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Destination server"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationServer
         {
             get { return Server; }
@@ -45,56 +45,56 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             get;
             set;
         }
-        [AddInParameter("Sql source server username"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source server username"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceUsername
         {
             get { return Username; }
             set { Username = value; }
         }
-        [AddInParameter("Sql destination server username"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination server username"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationUsername
         {
             get { return Username; }
             set { Username = value; }
         }
-        [AddInParameter("Sql source server password"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source server password"), AddInParameterEditor(typeof(TextParameterEditor), "password=true"), AddInParameterGroup("Source")]
         public virtual string SourcePassword
         {
             get { return Password; }
             set { Password = value; }
         }
-        [AddInParameter("Sql destination server password"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination server password"), AddInParameterEditor(typeof(TextParameterEditor), "password=true"), AddInParameterGroup("Destination")]
         public virtual string DestinationPassword
         {
             get { return Password; }
             set { Password = value; }
         }
-        [AddInParameter("Sql source database"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source database"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceDatabase
         {
             get { return Catalog; }
             set { Catalog = value; }
         }
-        [AddInParameter("Sql destination database"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination database"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationDatabase
         {
             get { return Catalog; }
             set { Catalog = value; }
         }
-        [AddInParameter("Sql source connection string"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Source")]
+        [AddInParameter("Sql source connection string"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Source")]
         public virtual string SourceConnectionString
         {
             get { return ManualConnectionString; }
             set { ManualConnectionString = value; }
         }
-        [AddInParameter("Sql destination connection string"), AddInParameterEditor(typeof(TextParameterEditor), "inputClass=NewUIinput;"), AddInParameterGroup("Destination")]
+        [AddInParameter("Sql destination connection string"), AddInParameterEditor(typeof(TextParameterEditor), ""), AddInParameterGroup("Destination")]
         public virtual string DestinationConnectionString
         {
             get { return ManualConnectionString; }
             set { ManualConnectionString = value; }
         }
 
-        [AddInParameter("Remove missing rows after import"), AddInParameterEditor(typeof(YesNoParameterEditor), "IconPath=/Admin/Images/Ribbon/Icons/Small/Warning.png;Tooltip=Removes rows from the destination and relation tables. This option takes precedence"), AddInParameterGroup("Destination")]
+        [AddInParameter("Remove missing rows after import"), AddInParameterEditor(typeof(YesNoParameterEditor), "Tooltip=Removes rows from the destination and relation tables. This option takes precedence"), AddInParameterGroup("Destination")]
         public virtual bool RemoveMissingAfterImport
         {
             get;
@@ -113,9 +113,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         [AddInParameter("Persist successful rows and skip failing rows"), AddInParameterEditor(typeof(YesNoParameterEditor), ""), AddInParameterGroup("Destination"), AddInParameterOrder(100)]
         public virtual bool SkipFailingRows { get; set; }
-
-        [AddInParameter("Use database views"), AddInParameterEditor(typeof(YesNoParameterEditor), ""), AddInParameterGroup("Source")]
-        public virtual bool UseDatabaseViews { get; set; }
 
         private string _sqlConnectionString;
         protected string SqlConnectionString
@@ -233,12 +230,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                         if (node.HasChildNodes)
                             SkipFailingRows = node.FirstChild.Value == "True";
                         break;
-                    case "UseDatabaseViews":
-                        if (node.HasChildNodes)
-                        {
-                            UseDatabaseViews = node.FirstChild.Value == "True";
-                        }
-                        break;
                 }
             }
             connection = new SqlConnection(SqlConnectionString);
@@ -296,7 +287,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             Catalog = newProvider.Catalog;
             DiscardDuplicates = newProvider.DiscardDuplicates;
             SkipFailingRows = newProvider.SkipFailingRows;
-            UseDatabaseViews = newProvider.UseDatabaseViews;
         }
 
         public override void UpdateDestinationSettings(IDestination destination)
@@ -331,7 +321,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             root.Add(CreateParameterNode(GetType(), "Sql destination connection string", DestinationConnectionString));
             root.Add(CreateParameterNode(GetType(), "Remove missing rows after import in the destination tables only", RemoveMissingAfterImportDestinationTablesOnly.ToString()));
             root.Add(CreateParameterNode(GetType(), "Persist successful rows and skip failing rows", SkipFailingRows.ToString()));
-            root.Add(CreateParameterNode(GetType(), "Use database views", UseDatabaseViews.ToString()));
 
             string ret = document.ToString();
             return ret;
@@ -351,7 +340,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             xmlTextWriter.WriteElementString("Catalog", Catalog);
             xmlTextWriter.WriteElementString("DiscardDuplicates", DiscardDuplicates.ToString());
             xmlTextWriter.WriteElementString("SkipFailingRows", SkipFailingRows.ToString());
-            xmlTextWriter.WriteElementString("UseDatabaseViews", UseDatabaseViews.ToString());
 
             GetSchema().SaveAsXml(xmlTextWriter);
         }
@@ -400,30 +388,14 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
         protected virtual string GetSqlForSchemaBuilding()
         {
-            string sql;
-            if (UseDatabaseViews)
-            {
-                sql = "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
-                            " case WHEN c.table_name IN (SELECT table_name FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) THEN 1 ELSE 0 END AS IsPrimaryKey " +
-                            " from INFORMATION_SCHEMA.COLUMNS  c " +
-                            " left  join (" +
-                            " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
-                            " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
-                            " INFORMATION_SCHEMA.TABLES " +
-                            " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME order by c.TABLE_NAME,ORDINAL_POSITION";
-            }
-            else
-            {
-                sql = "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
-                    " case WHEN c.table_name IN (SELECT table_name FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) THEN 1 ELSE 0 END AS IsPrimaryKey " +
-                    " from INFORMATION_SCHEMA.COLUMNS  c " +
-                    " left  join (" +
-                    " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
-                    " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
-                    " INFORMATION_SCHEMA.TABLES " +
-                    " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME and TABLE_TYPE<>'view'  order by c.TABLE_NAME,ORDINAL_POSITION";
-            }
-            return sql;
+            return "select c.table_name,  c.column_name, Data_type, CHARACTER_MAXIMUM_LENGTH,hasIdentity, c.table_schema," +
+                " (SELECT count(*) FROM   sys.objects join INFORMATION_SCHEMA.KEY_COLUMN_USAGE on name=constraint_name WHERE  TYPE = 'PK' and c.TABLE_CATALOG = TABLE_CATALOG AND c.TABLE_SCHEMA = TABLE_SCHEMA AND c.TABLE_NAME = TABLE_NAME AND c.COLUMN_NAME = COLUMN_NAME ) AS IsPrimaryKey " +
+                " from INFORMATION_SCHEMA.COLUMNS  c " +
+                " left  join (" +
+                " SELECT name, OBJECT_NAME(id) as tableName, COLUMNPROPERTY(id, name, 'IsIdentity') as hasIdentity, OBJECTPROPERTY(id,'IsPrimaryKey') as isPrimaryKey FROM syscolumns  WHERE  COLUMNPROPERTY(id, name, 'IsIdentity') !=2) as id " +
+                " on c.COLUMN_NAME=name and c.TABLE_NAME=tableName, " +
+                " INFORMATION_SCHEMA.TABLES " +
+                " where c.TABLE_NAME=INFORMATION_SCHEMA.TABLES.TABLE_NAME order by c.TABLE_NAME,ORDINAL_POSITION";
         }
 
         public override Schema GetOriginalDestinationSchema()
