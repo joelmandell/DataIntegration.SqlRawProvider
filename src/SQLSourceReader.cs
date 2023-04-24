@@ -47,7 +47,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                 string sql = "select * from (select " + columns + " from  " + fromTables + ") as result";
 
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                string conditionalsSql = mapping.Conditionals.GetConditionalsSql(out parameters);
+                string conditionalsSql = MappingExtensions.GetConditionalsSql(out parameters, mapping.Conditionals, false, false);
                 if (conditionalsSql != "")
                 {
                     conditionalsSql = conditionalsSql.Substring(0, conditionalsSql.Length - 4);
