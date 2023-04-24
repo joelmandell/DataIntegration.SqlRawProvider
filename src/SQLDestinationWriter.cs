@@ -288,7 +288,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
                 if (mapping.Conditionals.Count > 0)
                 {
-                    string mappingConditions = mapping.Conditionals.GetConditionalsSql(out parameters, true, true);
+                    string mappingConditions = MappingExtensions.GetConditionalsSql(out parameters, mapping.Conditionals, true, true);
                     if (!string.IsNullOrEmpty(mappingConditions))
                     {
                         mappingConditions = mappingConditions.Substring(0, mappingConditions.Length - 4);
