@@ -32,7 +32,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             return column.IsPrimaryKey;
         }
 
-        internal static string GetConditionalsSql(out List<SqlParameter> parameters, MappingConditionalCollection conditionals, bool skipVirtualColumns, bool useDestinationColumns)
+        public static string GetConditionalsSql(out List<SqlParameter> parameters, MappingConditionalCollection conditionals, bool skipVirtualColumns, bool useDestinationColumns)
         {
             string conditionalsSql = string.Empty;
             int conditionalCount = 0;
