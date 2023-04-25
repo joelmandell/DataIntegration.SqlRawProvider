@@ -58,152 +58,8 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                         continue;
                     }
                 }
-                switch (conditional.ConditionalOperator)
-                {
-                    case ConditionalOperator.Contains:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] LIKE '%{2}%' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.NotContains:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] NOT LIKE '%{2}%' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
 
-                    case ConditionalOperator.EqualTo:
-                        if (conditional.IsNullStringCondition)
-                        {
-                            conditionalsSql = string.Format("{0}[{1}]] IS NULL and ", conditionalsSql, columnName);
-                            continue;
-                        }
-                        else if (conditional.IsNullOrEmptyStringCondition)
-                        {
-                            conditionalsSql = string.Format("{0}[{1}] IS NULL OR [{2}] = '' and ", conditionalsSql, columnName, columnName);
-                            continue;
-                        }
-                        else
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] = @conditional{2} and ",
-                                conditionalsSql, columnName, conditionalCount
-                            );
-                        }
-                        break;
-                    case ConditionalOperator.DifferentFrom:
-                        if (conditional.IsNullStringCondition)
-                        {
-                            conditionalsSql = string.Format("{0}[{1}] IS NOT NULL and ", conditionalsSql, columnName);
-                            continue;
-                        }
-                        else if (conditional.IsNullOrEmptyStringCondition)
-                        {
-                            conditionalsSql = string.Format("{0}[{1}] IS NOT NULL AND [{1}] <> '' and ", conditionalsSql, columnName);
-                            continue;
-                        }
-                        else
-                        {
-                            conditionalsSql = string.Format("{0}[{1}] <> @conditional{2} and ", conditionalsSql, columnName, conditionalCount);
-                        }
-                        break;
-                    case ConditionalOperator.In:
-                        var conditionalValue = conditional.Condition;
-                        if (!string.IsNullOrEmpty(conditionalValue))
-                        {
-                            if (conditional.SourceColumn.Type == typeof(string))
-                            {
-                                conditionalValue = string.Join(",", conditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
-                            }
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] IN ({2}) and ",
-                                conditionalsSql,
-                                columnName,
-                                conditionalValue
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.NotIn:
-                        var notInConditionalValue = conditional.Condition;
-                        if (!string.IsNullOrEmpty(notInConditionalValue))
-                        {
-                            if (conditional.SourceColumn.Type == typeof(string))
-                            {
-                                notInConditionalValue = string.Join(",", notInConditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
-                            }
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] NOT IN ({2}) and ",
-                                conditionalsSql,
-                                columnName,
-                                notInConditionalValue
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.StartsWith:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] LIKE '{2}%' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.NotStartsWith:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] NOT LIKE '{2}%' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.EndsWith:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] LIKE '%{2}' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
-                    case ConditionalOperator.NotEndsWith:
-                        if (!string.IsNullOrEmpty(conditional.Condition))
-                        {
-                            conditionalsSql = string.Format(
-                                "{0}[{1}] NOT LIKE '%{2}' and ",
-                                conditionalsSql,
-                                columnName,
-                                conditional.Condition
-                            );
-                        }
-                        continue;
-
-                    default:
-                        conditionalsSql = string.Format(
-                            "{0}[{1}] = @conditional{2} and ",
-                            conditionalsSql,
-                            columnName,
-                            conditionalCount
-                        );
-                        break;
-                }
+                conditionalsSql = GetConditionalSql(columnName, conditional, conditionalCount);
 
                 if (conditional.SourceColumn.Type == typeof(DateTime))
                 {
@@ -219,5 +75,167 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
             return conditionalsSql;
         }
+
+        public static string GetConditionalSql(string columnName, MappingConditional mappingConditional, int conditionalCount)
+        {
+            string conditionalsSql = string.Empty;
+            switch (mappingConditional.ConditionalOperator)
+            {
+                case ConditionalOperator.Contains:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] LIKE '%{2}%' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.NotContains:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] NOT LIKE '%{2}%' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.EqualTo:
+                    if (mappingConditional.IsNullStringCondition)
+                    {
+                        conditionalsSql = string.Format("{0}[{1}]] IS NULL and ", conditionalsSql, columnName);
+                        break;
+                    }
+                    else if (mappingConditional.IsNullOrEmptyStringCondition)
+                    {
+                        conditionalsSql = string.Format("{0}[{1}] IS NULL OR [{2}] = '' and ", conditionalsSql, columnName, columnName);
+                        break;
+                    }
+                    else
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] = @conditional{2} and ",
+                            conditionalsSql, columnName, conditionalCount
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.DifferentFrom:
+                    if (mappingConditional.IsNullStringCondition)
+                    {
+                        conditionalsSql = string.Format("{0}[{1}] IS NOT NULL and ", conditionalsSql, columnName);
+                        break;
+                    }
+                    else if (mappingConditional.IsNullOrEmptyStringCondition)
+                    {
+                        conditionalsSql = string.Format("{0}[{1}] IS NOT NULL AND [{1}] <> '' and ", conditionalsSql, columnName);
+                        break;
+                    }
+                    else
+                    {
+                        conditionalsSql = string.Format("{0}[{1}] <> @conditional{2} and ", conditionalsSql, columnName, conditionalCount);
+                    }
+                    break;
+
+                case ConditionalOperator.In:
+                    var conditionalValue = mappingConditional.Condition;
+                    if (!string.IsNullOrEmpty(conditionalValue))
+                    {
+                        if (mappingConditional.SourceColumn.Type == typeof(string))
+                        {
+                            conditionalValue = string.Join(",", conditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
+                        }
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] IN ({2}) and ",
+                            conditionalsSql,
+                            columnName,
+                            conditionalValue
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.NotIn:
+                    var notInConditionalValue = mappingConditional.Condition;
+                    if (!string.IsNullOrEmpty(notInConditionalValue))
+                    {
+                        if (mappingConditional.SourceColumn.Type == typeof(string))
+                        {
+                            notInConditionalValue = string.Join(",", notInConditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
+                        }
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] NOT IN ({2}) and ",
+                            conditionalsSql,
+                            columnName,
+                            notInConditionalValue
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.StartsWith:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] LIKE '{2}%' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.NotStartsWith:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] NOT LIKE '{2}%' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.EndsWith:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] LIKE '%{2}' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                case ConditionalOperator.NotEndsWith:
+                    if (!string.IsNullOrEmpty(mappingConditional.Condition))
+                    {
+                        conditionalsSql = string.Format(
+                            "{0}[{1}] NOT LIKE '%{2}' and ",
+                            conditionalsSql,
+                            columnName,
+                            mappingConditional.Condition
+                        );
+                    }
+                    break;
+
+                default:
+                    conditionalsSql = string.Format(
+                        "{0}[{1}] = @conditional{2} and ",
+                        conditionalsSql,
+                        columnName,
+                        conditionalCount
+                    );
+                    break;
+            }
+
+            return conditionalsSql;
+        }
+
     }
 }
