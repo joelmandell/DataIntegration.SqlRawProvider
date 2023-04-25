@@ -59,7 +59,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                     }
                 }
 
-                conditionalsSql = GetConditionalSql(columnName, conditional, conditionalCount);
+                conditionalsSql = GetConditionalSql(conditionalsSql, columnName, conditional, conditionalCount);
 
                 if (conditional.SourceColumn.Type == typeof(DateTime))
                 {
@@ -76,9 +76,8 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             return conditionalsSql;
         }
 
-        public static string GetConditionalSql(string columnName, MappingConditional mappingConditional, int conditionalCount)
+        public static string GetConditionalSql(string conditionalsSql, string columnName, MappingConditional mappingConditional, int conditionalCount)
         {
-            string conditionalsSql = string.Empty;
             switch (mappingConditional.ConditionalOperator)
             {
                 case ConditionalOperator.Contains:
