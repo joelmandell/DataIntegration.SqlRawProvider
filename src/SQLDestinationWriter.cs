@@ -160,7 +160,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
         {
             List<SqlColumn> destColumns = new List<SqlColumn>();
             var columnMappings = Mapping.GetColumnMappings();
-            foreach (ColumnMapping columnMapping in columnMappings)
+            foreach (ColumnMapping columnMapping in columnMappings.DistinctBy(obj => obj.DestinationColumn.Name))
             {
                 destColumns.Add((SqlColumn)columnMapping.DestinationColumn);
             }
@@ -200,23 +200,24 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 if (columnMapping.HasScriptWithValue || row.ContainsKey(columnMapping.SourceColumn.Name))
                 {
-                    switch (columnMapping.ScriptType)
+                    //Once DataIntegration.ColumnMapping.GetScriptedOrConvertedInputToOutputFormat(object value) is released this will be replaced by that function call
+                    object dataToRow = columnMapping.ScriptType switch
                     {
-                        case ScriptType.None:
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]);
-                            break;
-                        case ScriptType.Append:
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]) + columnMapping.ScriptValue;
-                            break;
-                        case ScriptType.Prepend:
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.ScriptValue + columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]);
-                            break;
-                        case ScriptType.Constant:
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();
-                            break;
-                        case ScriptType.NewGuid:
-                            dataRow[columnMapping.DestinationColumn.Name] = columnMapping.GetScriptValue();
-                            break;
+                        ScriptType.None => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
+                        ScriptType.Append => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]) + columnMapping.ScriptValue,
+                        ScriptType.Prepend => columnMapping.ScriptValue + columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
+                        ScriptType.Constant => columnMapping.GetScriptValue(),
+                        ScriptType.NewGuid => columnMapping.GetScriptValue(),
+                        _ => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
+                    };
+
+                    if (columnMappings.Any(obj => obj.DestinationColumn.Name == columnMapping.DestinationColumn.Name && obj.GetId() != columnMapping.GetId()))
+                    {
+                        dataRow[columnMapping.DestinationColumn.Name] += dataToRow.ToString();
+                    }
+                    else
+                    {
+                        dataRow[columnMapping.DestinationColumn.Name] = dataToRow;
                     }
                 }
                 else
@@ -425,7 +426,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 string sqlConditions = "";
                 string firstKey = "";
-                var columnMappings = Mapping.GetColumnMappings().Where(cm => cm.Active);
+                var columnMappings = Mapping.GetColumnMappings().Where(cm => cm.Active).DistinctBy(obj => obj.DestinationColumn.Name);
                 bool isPrimaryKeyColumnExists = columnMappings.IsKeyColumnExists();
 
                 foreach (ColumnMapping columnMapping in columnMappings)
