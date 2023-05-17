@@ -147,7 +147,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                     {
                         if (mappingConditional.SourceColumn.Type == typeof(string))
                         {
-                            conditionalValue = string.Join(",", conditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
+                            conditionalValue = string.Join(",", conditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val.Trim()}'"));
                         }
                         conditionalsSql = string.Format(
                             "{0}[{1}] IN ({2}) and ",
@@ -164,7 +164,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
                     {
                         if (mappingConditional.SourceColumn.Type == typeof(string))
                         {
-                            notInConditionalValue = string.Join(",", notInConditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val}'"));
+                            notInConditionalValue = string.Join(",", notInConditionalValue.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries).Select(val => $"'{val.Trim()}'"));
                         }
                         conditionalsSql = string.Format(
                             "{0}[{1}] NOT IN ({2}) and ",
