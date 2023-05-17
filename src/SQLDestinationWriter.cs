@@ -200,16 +200,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 if (columnMapping.HasScriptWithValue || row.ContainsKey(columnMapping.SourceColumn.Name))
                 {
-                    //Once DataIntegration.ColumnMapping.GetScriptedOrConvertedInputToOutputFormat(object value) is released this will be replaced by that function call
-                    object dataToRow = columnMapping.ScriptType switch
-                    {
-                        ScriptType.None => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
-                        ScriptType.Append => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]) + columnMapping.ScriptValue,
-                        ScriptType.Prepend => columnMapping.ScriptValue + columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
-                        ScriptType.Constant => columnMapping.GetScriptValue(),
-                        ScriptType.NewGuid => columnMapping.GetScriptValue(),
-                        _ => columnMapping.ConvertInputToOutputFormat(row[columnMapping.SourceColumn.Name]),
-                    };
+                    object dataToRow = columnMapping.ConvertInputValueToOutputValue(row[columnMapping.SourceColumn.Name]);
 
                     if (columnMappings.Any(obj => obj.DestinationColumn.Name == columnMapping.DestinationColumn.Name && obj.GetId() != columnMapping.GetId()))
                     {
