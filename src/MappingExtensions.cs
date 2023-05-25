@@ -235,6 +235,217 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
 
             return conditionalsSql;
         }
+        public static string GetShopIdColumnName(string databaseTableName)
+        {
+            string result;
+            switch (databaseTableName)
+            {
+                case "AccessUser":
+                    result = "AccessUserShopId";
+                    break;
+                case "Area":
+                    result = "AreaEcomShopId";
+                    break;
+                case "EcomAssortmentShopRelations":
+                    result = "AssortmentShopRelationShopID";
+                    break;
+                case "EcomDiscount":
+                    result = "DiscountShopId";
+                    break;
+                case "EcomFeed":
+                    result = "FeedChannelId";
+                    break;
+                case "EcomFees":
+                    result = "FeeShopId";
+                    break;
+                case "EcomLoyaltyRewardRule":
+                    result = "LoyaltyRewardRuleShopId";
+                    break;
+                case "EcomOrderContextShopRelation":
+                    result = "OrderContextShopRelationShopId";
+                    break;
+                case "EcomOrderLineFieldGroupRelation":
+                    result = "OrderLineFieldGroupRelationShopID";
+                    break;
+                case "EcomOrders":
+                    result = "OrderShopId";
+                    break;
+                case "EcomPrices":
+                    result = "PriceShopId";
+                    break;
+                case "EcomProductAssignmentRuleShop":
+                    result = "EcomProductAssignmentRuleShopShopId";
+                    break;
+                case "EcomProducts":
+                    result = "ProductDefaultShopId";
+                    break;
+                case "EcomSalesDiscount":
+                    result = "SalesDiscountShop";
+                    break;
+                case "EcomShopGroupRelation":
+                    result = "ShopGroupShopId";
+                    break;
+                case "EcomShopLanguageRelation":
+                    result = "ShopId";
+                    break;
+                case "EcomShops":
+                    result = "ShopId";
+                    break;
+                case "EcomShopStockLocationRelation":
+                    result = "ShopRelationShopId";
+                    break;
+                case "TemplateMenu":
+                    result = "TemplateMenuEcomShopId";
+                    break;
+                default:
+                    result = "";
+                    break;
+            }
+            return result;
+        }
 
+        public static string GetLanguageIdColumnName(string databaseTableName)
+        {
+            string result;
+            switch (databaseTableName)
+            {
+                case "AccessUserCard":
+                    result = "AccessUserCardLanguageID";
+                    break;
+                case "Area":
+                    result = "AreaEcomLanguageId";
+                    break;
+                case "EcomAssortmentItems":
+                    result = "AssortmentItemLanguageID";
+                    break;
+                case "EcomAssortments":
+                    result = "AssortmentLanguageID";
+                    break;
+                case "EcomCountryText":
+                    result = "CountryTextLanguageId";
+                    break;
+                case "EcomCurrencies":
+                    result = "CurrencyLanguageId";
+                    break;
+                case "EcomCustomerFavoriteProducts":
+                    result = "ProductLanguageId";
+                    break;
+                case "EcomDetails":
+                    result = "DetailLanguageId";
+                    break;
+                case "EcomDetailsGroupTranslation":
+                    result = "DetailsGroupTranslationLanguageId";
+                    break;
+                case "EcomDiscount":
+                    result = "DiscountLanguageId";
+                    break;
+                case "EcomDiscountTranslation":
+                    result = "DiscountTranslationLanguageId";
+                    break;
+                case "EcomFieldDisplayGroupTranslation":
+                    result = "FieldDisplayGroupTranslationLanguageId";
+                    break;
+                case "EcomFieldOptionTranslation":
+                    result = "EcomFieldOptionTranslationLanguageID";
+                    break;
+                case "EcomGroups":
+                    result = "GroupLanguageId";
+                    break;
+                case "EcomLanguages":
+                    result = "LanguageId";
+                    break;
+                case "EcomLoyaltyRewardTranslation":
+                    result = "LoyaltyRewardTranslationLanguageId";
+                    break;
+                case "EcomMethodCountryRelation":
+                    result = "MethodCountryRelLanguageId";
+                    break;
+                case "EcomOrders":
+                    result = "OrderLanguageId";
+                    break;
+                case "EcomOrderStateTranslations":
+                    result = "OrderStateTranslationLanguageId";
+                    break;
+                case "EcomPayments":
+                    result = "PaymentLanguageId";
+                    break;
+                case "EcomProductCategoryFieldGroupValue":
+                    result = "FieldValueGroupLanguageId";
+                    break;
+                case "EcomProductCategoryFieldTranslation":
+                    result = "FieldTranslationLanguageId";
+                    break;
+                case "EcomProductCategoryTranslation":
+                    result = "CategoryTranslationLanguageId";
+                    break;
+                case "EcomProductFieldTranslation":
+                    result = "ProductFieldTranslationLanguageID";
+                    break;
+                case "EcomProducts":
+                    result = "ProductLanguageId";
+                    break;
+                case "EcomProductsRelatedGroups":
+                    result = "RelatedGroupLanguageId";
+                    break;
+                case "EcomRelatedSmartSearches":
+                    result = "RelatedLanguageId";
+                    break;
+                case "EcomRmaEmailConfigurations":
+                    result = "RmaEmailConfigurationLanguage";
+                    break;
+                case "EcomRmaEventTranslations":
+                    result = "RmaEventTranslationLanguageId";
+                    break;
+                case "EcomRmas":
+                    result = "RmaEmailNotificationLanguage";
+                    break;
+                case "EcomRmaStateTranslations":
+                    result = "RmaStateLanguageId";
+                    break;
+                case "EcomSalesDiscountLanguages":
+                    result = "SalesDiscountLanguagesLanguageId";
+                    break;
+                case "EcomSavedForLater":
+                    result = "SavedForLaterLanguageId";
+                    break;
+                case "EcomShippings":
+                    result = "ShippingLanguageId";
+                    break;
+                case "EcomShopLanguageRelation":
+                    result = "LanguageId";
+                    break;
+                case "EcomStockLocation":
+                    result = "StockLocationLanguageId";
+                    break;
+                case "EcomStockStatusLanguageValue":
+                    result = "StockStatusLanguageValueLanguageId";
+                    break;
+                case "EcomValidationGroupsTranslation":
+                    result = "EcomValidationGroupsTranslationValidationGroupLanguageID";
+                    break;
+                case "EcomVariantGroupOptionPropertyValue":
+                    result = "VariantGroupOptionPropertyValueLanguageID";
+                    break;
+                case "EcomVariantGroups":
+                    result = "VariantGroupLanguageId";
+                    break;
+                case "EcomVariantsOptions":
+                    result = "VariantOptionLanguageId";
+                    break;
+                case "EcomVatCountryRelations":
+                    result = "VatCountryRelLangId";
+                    break;
+                case "EcomVatGroups":
+                    result = "VatGroupLanguageId";
+                    break;
+                case "Languages":
+                    result = "LanguageID";
+                    break;
+                default:
+                    result = "";
+                    break;
+            }
+            return result;
+        }
     }
 }
