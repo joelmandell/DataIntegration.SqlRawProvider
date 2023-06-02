@@ -195,7 +195,7 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
             {
                 if (columnMapping.HasScriptWithValue || row.ContainsKey(columnMapping.SourceColumn.Name))
                 {
-                    object dataToRow = columnMapping.ConvertInputValueToOutputValue(row[columnMapping.SourceColumn.Name]);
+                    object dataToRow = columnMapping.ConvertInputValueToOutputValue(row[columnMapping.SourceColumn?.Name] ?? null);
 
                     if (columnMappings.Any(obj => obj.DestinationColumn.Name == columnMapping.DestinationColumn.Name && obj.GetId() != columnMapping.GetId()))
                     {
