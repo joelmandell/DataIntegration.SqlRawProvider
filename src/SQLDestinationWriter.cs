@@ -188,11 +188,6 @@ namespace Dynamicweb.DataIntegration.Providers.SqlProvider
         /// <param name="Row">The row to be written.</param>
         public virtual void Write(Dictionary<string, object> row)
         {
-            if (!mapping.Conditionals.CheckConditionals(row))
-            {
-                return;
-            }
-
             DataRow dataRow = TableToWrite.NewRow();
 
             var columnMappings = mapping.GetColumnMappings().Where(cm => cm.Active);
