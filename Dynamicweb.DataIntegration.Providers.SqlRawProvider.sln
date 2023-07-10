@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dynamicweb.DataIntegration.Providers.SqlProvider", "src\Dynamicweb.DataIntegration.Providers.SqlProvider.csproj", "{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dynamicweb.DataIntegration.Providers.SqlRawProvider", "src\Dynamicweb.DataIntegration.Providers.SqlRawProvider.csproj", "{FBEE0370-1D59-4990-8FB0-B2BA608FFCCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
